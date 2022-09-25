@@ -1,47 +1,29 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+<script>
+ import Tab from './components/Tab.vue';
+ import { tabStore } from './tab-store.js';
+
+ const url = browser.extension.getBackgroundPage().location;
+
+ export default {
+     components: {
+         Tab
+     },
+     data() {
+         return {
+             url: url,
+             tabStore: tabStore,
+         }
+     },
+     created() {
+         tabStore.init();
+     }
+ }
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <a :href="url">{{ url }}</a>
+    <Tab v-for="tab in tabStore.tabs" :tab="tab" :key="tab.id"/>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>

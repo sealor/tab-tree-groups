@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Grouped Tab Trees",
+  "version": "1.0",
+
+  "description": "Grouped Tab Trees description",
+
+  "sidebar_action": {
+    "default_title" : "Grouped Tab Trees",
+    "default_panel": "index.html"
+  },
+
+  "background": {
+    "page": "index.html"
+  },
+
+  "options_ui": {
+    "page": "index.html"
+  },
+
+  "permissions": [
+    "tabs",
+    "sessions",
+    "management",
+    "theme"
+  ]
+}
