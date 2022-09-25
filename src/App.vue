@@ -1,12 +1,12 @@
 <script>
- import Tab from './components/Tab.vue';
+ import TabTree from './components/TabTree.vue';
  import { tabStore } from './tab-store.js';
 
  const url = browser.extension.getBackgroundPage().location;
 
  export default {
      components: {
-         Tab
+         TabTree
      },
      data() {
          return {
@@ -22,7 +22,11 @@
 
 <template>
     <a :href="url">{{ url }}</a>
-    <Tab v-for="tab in tabStore.tabs" :tab="tab" :key="tab.id"/>
+    <template v-for="tab in tabStore.tabs">
+        <template v-if="tab.openerTabId === undefined">
+            <TabTree :parentTab="tab"/>
+        </template>
+    </template>
 </template>
 
 <style scoped>
