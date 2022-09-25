@@ -4,6 +4,11 @@ const treeTabStore = reactive({
   rootTabs: [],
   tabById: {},
   init() {
+    browser.tabs.onCreated.addListener(tab => this.onCreated(tab));
+    browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => this.onUpdated(tabId, changeInfo, tab));
+    browser.tabs.onMoved.addListener((tabId, moveInfo) => this.onMoved(tabId, moveInfo));
+    browser.tabs.onReplaced.addListener((addedTabId, removedTabId) => this.onReplaced(addedTabId, removedTabId));
+    browser.tabs.onAttached.addListener((tabId, removedTabId) => this.onAttached(addedTabId, removedTabId));
     browser.tabs.onActivated.addListener(info => this.onActivated(info));
     browser.tabs.onRemoved.addListener((tabId, removeInfo) => this.onRemoved(tabId, removeInfo));
     this.updateAll();
@@ -16,15 +21,53 @@ const treeTabStore = reactive({
   onUpdateAll(tabs) {
     this.rootTabs.splice(0, this.rootTabs.length);
     for (let tab of tabs) {
-      this.tabById[tab.id] = tab;
       tab.subTabs = reactive([]);
+      this.tabById[tab.id] = tab;
 
       if (tab.openerTabId === undefined) {
         this.rootTabs.push(tab);
       } else {
-        this.tabById[tab.openerTabId].subTabs.push(tab);
+        const parentTab = this.tabById[tab.openerTabId];
+        parentTab.subTabs.push(tab);
       }
     }
+  },
+  onCreated(tab) {
+    console.log("C", tab.id, tab.openerTabId, tab.title);
+
+    tab.subTabs = reactive([])
+    this.tabById[tab.id] = tab;
+
+    if (tab.openerTabId === undefined) {
+      this.rootTabs.push(tab);
+    } else {
+      const parentTab = this.tabById[tab.openerTabId];
+      parentTab.subTabs.push(tab);
+      console.log(parentTab, tab.title);
+    }
+  },
+  onUpdated(tabId, changeInfo, tab) {
+    console.log("U", tab.id, tab.openerTabId, tab.title, changeInfo);
+    // TODO: opener changed by tree-style-tab?!
+
+    const originTab = this.tabById[tabId];
+    tab.subTabs = originTab.subTabs;
+
+    let tabs;
+    if (tab.openerTabId === undefined) {
+      tabs = this.rootTabs;
+    } else {
+      tabs = this.tabById[tab.openerTabId].subTabs;
+    }
+
+    const tabIndex = tabs.findIndex((tabItem) => tabItem.id === tab.id);
+    tabs.splice(tabIndex, 1, tab);
+  },
+  onMoved(tabId, moveInfo) {
+    console.log("M", tabId);
+  },
+  onReplaced(addedTabId, removedTabId) {
+    console.log("R", addedTabId, removedTabId);
   },
   activateTab(tabId) {
     browser.tabs.update(tabId, {active: true});

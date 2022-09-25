@@ -25,7 +25,7 @@
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
-        <Tab v-for="subTab in tab.subTabs" :tab="subTab"/>
+        <Tab v-for="subTab in tab.subTabs" :tab="subTab" :key="subTab.id"/>
     </div>
 </template>
 
