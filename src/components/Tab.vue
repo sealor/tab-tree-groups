@@ -12,13 +12,16 @@
      methods: {
          activateTab() {
              this.treeTabStore.activateTab(this.tab.id);
-         }
+         },
+         removeTab() {
+             this.treeTabStore.removeTab(this.tab.id);
+         },
      }
  }
 </script>
 
 <template>
-    <div @click="activateTab" class="tab" :class="{ active: tab.active }">
+    <div @click="activateTab" @click.middle="removeTab" class="tab" :class="{ active: tab.active }">
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
