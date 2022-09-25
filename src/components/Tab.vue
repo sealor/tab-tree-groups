@@ -1,17 +1,17 @@
 <script>
- import { tabStore } from '../tab-store.js';
+ import { treeTabStore } from '../tree-tab-store.js';
 
  export default {
      props: ["tab"],
      data() {
          return {
              tab: this.tab,
-             tabStore: tabStore,
+             treeTabStore: treeTabStore,
          }
      },
      methods: {
          activateTab() {
-             this.tabStore.activateTab(this.tab.id);
+             this.treeTabStore.activateTab(this.tab.id);
          }
      }
  }
@@ -19,8 +19,10 @@
 
 <template>
     <div @click="activateTab" class="tab" :class="{ active: tab.active }">
-        <img :src="tab.favIconUrl">
-        {{ tab.title }}
+        <img :src="tab.favIconUrl">{{ tab.title }}
+    </div>
+    <div class="subTabs">
+        <Tab v-for="subTab in tab.subTabs" :tab="subTab"/>
     </div>
 </template>
 
@@ -34,6 +36,10 @@
 
      display: flex;
      align-items: center;
+ }
+
+ div.subTabs {
+     margin-left: 0.7em;
  }
 
  div.tab { background-color: #ebebeb; }

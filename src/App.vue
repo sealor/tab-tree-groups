@@ -1,32 +1,28 @@
 <script>
- import TabTree from './components/TabTree.vue';
- import { tabStore } from './tab-store.js';
+ import Tab from './components/Tab.vue';
+ import { treeTabStore } from './tree-tab-store.js';
 
  const url = browser.extension.getBackgroundPage().location;
 
  export default {
      components: {
-         TabTree
+         Tab
      },
      data() {
          return {
              url: url,
-             tabStore: tabStore,
+             treeTabStore: treeTabStore,
          }
      },
      created() {
-         tabStore.init();
+         treeTabStore.init();
      }
  }
 </script>
 
 <template>
     <a :href="url">{{ url }}</a>
-    <template v-for="tab in tabStore.tabs">
-        <template v-if="tab.openerTabId === undefined">
-            <TabTree :parentTab="tab"/>
-        </template>
-    </template>
+    <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.id"/>
 </template>
 
 <style scoped>
