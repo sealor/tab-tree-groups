@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 
 const treeTabStore = reactive({
-  rootTabs: [],
+  rootTabs: reactive([]),
   tabById: {},
   init() {
     browser.tabs.onCreated.addListener(tab => this.onCreated(tab));
@@ -43,14 +43,20 @@ const treeTabStore = reactive({
     } else {
       const parentTab = this.tabById[tab.openerTabId];
       parentTab.subTabs.push(tab);
-      console.log(parentTab, tab.title);
     }
   },
   onUpdated(tabId, changeInfo, tab) {
-    console.log("U", tab.id, tab.openerTabId, tab.title, changeInfo);
-    // TODO: opener changed by tree-style-tab?!
+    let tmpChangeInfo = Object.assign({}, changeInfo);
+    delete tmpChangeInfo.favIconUrl;
+    console.log("U", tab.id, tab.openerTabId, tab.title, tmpChangeInfo);
 
     const originTab = this.tabById[tabId];
+    // FIXME: remove and re-create tab if openerTabId changed
+    if (originTab.openerTabId !== tab.openerTabId) {
+      this.onRemoved(originTab.id);
+      this.onCreated(tab);
+      return;
+    }
     tab.subTabs = originTab.subTabs;
 
     let tabs;
