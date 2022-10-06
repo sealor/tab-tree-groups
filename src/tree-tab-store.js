@@ -47,7 +47,8 @@ const treeTabStore = reactive({
   },
   onUpdated(tabId, changeInfo, tab) {
     let tmpChangeInfo = Object.assign({}, changeInfo);
-    delete tmpChangeInfo.favIconUrl;
+    if (tmpChangeInfo.favIconUrl !== undefined)
+      tmpChangeInfo.favIconUrl = "changed";
     console.log("U", tab.id, tab.openerTabId, tab.title, tmpChangeInfo);
 
     const originTab = this.tabById[tabId];
@@ -57,17 +58,8 @@ const treeTabStore = reactive({
       this.onCreated(tab);
       return;
     }
-    tab.subTabs = originTab.subTabs;
 
-    let tabs;
-    if (tab.openerTabId === undefined) {
-      tabs = this.rootTabs;
-    } else {
-      tabs = this.tabById[tab.openerTabId].subTabs;
-    }
-
-    const tabIndex = tabs.findIndex((tabItem) => tabItem.id === tab.id);
-    tabs.splice(tabIndex, 1, tab);
+    Object.assign(originTab, changeInfo);
   },
   onMoved(tabId, moveInfo) {
     console.log("M", tabId);
