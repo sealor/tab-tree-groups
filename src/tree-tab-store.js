@@ -71,10 +71,14 @@ const treeTabStore = reactive({
     browser.tabs.update(tabId, {active: true});
   },
   onActivated(activeInfo) {
-    const previousTab = this.tabById[activeInfo.previousTabId];
+    console.log("A", activeInfo);
     const tab = this.tabById[activeInfo.tabId];
-    previousTab.active = false;
     tab.active = true;
+
+    if (activeInfo.previousTabId !== undefined) {
+      const previousTab = this.tabById[activeInfo.previousTabId];
+      previousTab.active = false;
+    }
   },
   removeTab(tabId) {
     let collectTabWithSubTabs = (tab) => {
@@ -92,6 +96,7 @@ const treeTabStore = reactive({
     browser.tabs.remove(removeTabIds);
   },
   onRemoved(tabId, removeInfo) {
+    console.log("RM", removeInfo);
     let removeTabInArray = (tabs, tab) => {
       const tabIndex = tabs.findIndex((tabItem) => tabItem.id === tab.id);
       tabs.splice(tabIndex, 1);
