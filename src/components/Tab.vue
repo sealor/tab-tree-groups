@@ -48,7 +48,7 @@
  }
 
  div.subTabs {
-     margin-left: 0.7em;
+     margin-left: 0.8em;
  }
 
  div.tab { background-color: #ebebeb; }
