@@ -16,12 +16,18 @@
          removeTab() {
              this.treeTabStore.removeTab(this.tab.id);
          },
+         openTabContextMenu(event) {
+             browser.menus.overrideContext({
+                 context: 'tab',
+                 tabId: parseInt(this.tab.id),
+             });
+         },
      }
  }
 </script>
 
 <template>
-    <div @click="activateTab" @click.middle="removeTab" class="tab" :class="{ active: tab.active }">
+    <div @click="activateTab" @click.middle="removeTab" @contextmenu="openTabContextMenu" class="tab" :class="{ active: tab.active }">
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
