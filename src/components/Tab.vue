@@ -9,6 +9,10 @@
              treeTabStore: treeTabStore,
          }
      },
+     mounted() {
+         if (this.tab.active)
+             this.onActivatedScrollToTab();
+     },
      methods: {
          activateTab() {
              this.treeTabStore.activateTab(this.tab.id);
@@ -22,12 +26,27 @@
                  tabId: parseInt(this.tab.id),
              });
          },
-     }
+         onActivatedScrollToTab() {
+             let rect = this.$refs.root.getBoundingClientRect();
+
+             if (rect.top < 0)
+                 window.scrollTo({top: window.scrollY + rect.top - (window.innerHeight / 10), behavior: "smooth"});
+
+             if (rect.bottom > window.innerHeight)
+                 window.scrollTo({top: window.scrollY + (rect.bottom - window.innerHeight) + (window.innerHeight / 10), behavior: "smooth"});
+         },
+     },
+     watch: {
+         "tab.active"(newValue) {
+             if (newValue === true)
+                 this.onActivatedScrollToTab();
+         },
+     },
  }
 </script>
 
 <template>
-    <div @click="activateTab" @click.middle="removeTab" @contextmenu="openTabContextMenu" class="tab" :class="{ active: tab.active }">
+    <div ref="root" @click="activateTab" @click.middle="removeTab" @contextmenu="openTabContextMenu" class="tab" :class="{ active: tab.active }">
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
