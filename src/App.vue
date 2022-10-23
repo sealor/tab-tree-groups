@@ -23,6 +23,8 @@
 <template>
     <a :href="url">{{ url }}</a>
     <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.id"/>
+    <br /><br />
+    <a :href="url">{{ url }}</a>
 </template>
 
 <style scoped>
