@@ -1,4 +1,5 @@
 import { describeTabTreeStoreTests } from './tab-tree-store-test'
+import { describeLearningVueTests } from './learning-vue-test'
 
 var css = document.createElement('link');
 css.rel = "stylesheet";
@@ -13,6 +14,7 @@ script.onload = function () {
   mocha.setup('bdd');
 
   describeTabTreeStoreTests();
+  describeLearningVueTests();
 
   mocha.checkLeaks();
   mocha.run();
