@@ -73,7 +73,7 @@ const treeTabStore = {
     browser.tabs.update(tabId, {active: true});
   },
   onActivated(activeInfo) {
-    console.log("A", activeInfo);
+    console.log("tree", "onActivated", activeInfo);
     const tab = this.tabById[activeInfo.tabId];
     tab.active = true;
 
