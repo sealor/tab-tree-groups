@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 
-const treeTabStore = reactive({
+const treeTabStore = {
   rootTabs: reactive([]),
   tabById: {},
   init() {
@@ -21,7 +21,8 @@ const treeTabStore = reactive({
   onUpdateAll(tabs) {
     this.rootTabs.splice(0, this.rootTabs.length);
     for (let tab of tabs) {
-      tab.subTabs = reactive([]);
+      tab = reactive(tab);
+      tab.subTabs = [];
       this.tabById[tab.id] = tab;
 
       if (tab.openerTabId === undefined) {
@@ -35,7 +36,8 @@ const treeTabStore = reactive({
   onCreated(tab) {
     console.log("C", tab.id, tab.openerTabId, tab.title);
 
-    tab.subTabs = reactive([])
+    tab = reactive(tab);
+    tab.subTabs = [];
     this.tabById[tab.id] = tab;
 
     if (tab.openerTabId === undefined) {
@@ -113,6 +115,6 @@ const treeTabStore = reactive({
 
     delete this.tabById[tabId];
   },
-});
+};
 
 export { treeTabStore };
