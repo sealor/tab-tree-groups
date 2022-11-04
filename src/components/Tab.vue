@@ -6,7 +6,6 @@
      data() {
          return {
              tab: this.tab,
-             treeTabStore: treeTabStore,
          }
      },
      mounted() {
@@ -15,10 +14,11 @@
      },
      methods: {
          activateTab() {
-             this.treeTabStore.activateTab(this.tab.id);
+             treeTabStore.activateTab(this.tab.id);
          },
          removeTab() {
-             this.treeTabStore.removeTab(this.tab.id);
+             console.log("tree", "removeTab", treeTabStore);
+             treeTabStore.removeTab(this.tab.id);
          },
          openTabContextMenu(event) {
              browser.menus.overrideContext({
