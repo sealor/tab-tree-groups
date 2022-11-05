@@ -27,13 +27,24 @@
              });
          },
          onActivatedScrollToTab() {
-             let rect = this.$refs.root.getBoundingClientRect();
+              const main = document.getElementById("main");
 
-             if (rect.top < 0)
-                 window.scrollTo({top: window.scrollY + rect.top - (window.innerHeight / 10), behavior: "smooth"});
+              const mainRect = main.getBoundingClientRect();
+              const tabRect = this.$refs.root.getBoundingClientRect();
 
-             if (rect.bottom > window.innerHeight)
-                 window.scrollTo({top: window.scrollY + (rect.bottom - window.innerHeight) + (window.innerHeight / 10), behavior: "smooth"});
+             const topDiff = tabRect.top - mainRect.top;
+              if (topDiff < 0) {
+                const top = main.scrollTop + topDiff - (mainRect.height / 10);
+                console.log("tree", "scroll up to top", top);
+                main.scrollTo({top: top, behavior: "smooth"});
+              }
+
+             const bottomDiff = mainRect.bottom - tabRect.bottom;
+              if (bottomDiff < 0) {
+                const top = main.scrollTop - bottomDiff + (mainRect.height / 10);
+                console.log("tree", "scroll down to bottom", top);
+                main.scrollTo({top: top, behavior: "smooth"});
+              }
          },
      },
      watch: {

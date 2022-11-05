@@ -21,11 +21,26 @@
 </script>
 
 <template>
-    <a :href="url">{{ url }}</a>
-    <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.id"/>
-    <br /><br />
-    <a :href="url">{{ url }}</a>
+    <div id="container">
+        <div id="header">
+            <a :href="url">{{ url }}</a>
+        </div>
+
+        <div id="main">
+            <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.id"/>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+ #container {
+     display: flex;
+     flex-direction: column;
+     height: 100vh;
+ }
+ #main {
+     overflow-y: scroll;
+     overflow-x: hidden;
+     padding-bottom: 5em;
+ }
 </style>
