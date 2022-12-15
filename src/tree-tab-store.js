@@ -11,14 +11,12 @@ class TreeTabStore {
     browser.tabs.onRemoved.addListener((tabId, removeInfo) => this.#onRemoved(tabId, removeInfo));
     browser.tabs.onMoved.addListener((tabId, moveInfo) => this.#onMoved(tabId, moveInfo));
     browser.tabs.onReplaced.addListener((addedTabId, removedTabId) => this.#onReplaced(addedTabId, removedTabId));
-
-    this.#addInitialTabs();
   }
 
-  #addInitialTabs(tabs) {
-    browser.tabs.query({currentWindow: true})
-           .then(tabs => tabs.forEach(tab => this.#addTab(tab)))
-           .catch(error => console.log(error));
+  replaceTabs(tabs) {
+    this.rootTabs.splice(0, this.rootTabs.length);
+    this.#tabById = {};
+    tabs.forEach(tab => this.#addTab(tab));
   }
 
   #addTab(tab) {

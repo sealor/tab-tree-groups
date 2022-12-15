@@ -1,6 +1,7 @@
 <script>
  import Tab from './components/Tab.vue';
  import { treeTabStore } from './tree-tab-store.js';
+ import { groupStore } from './group-store.js';
 
  const url = document.location.href;
 
@@ -12,11 +13,26 @@
          return {
              url: url,
              treeTabStore: treeTabStore,
+             groupStore: groupStore,
          }
      },
      created() {
          treeTabStore.init();
-     }
+         groupStore.init();
+     },
+     methods: {
+         changeActiveGroup(event) {
+             groupStore.activateGroup(event.srcElement.value);
+             event.srcElement.value = "";
+         },
+     },
+     computed: {
+         group_options() {
+             var options = Array.from(groupStore.groups);
+             options.sort();
+             return options;
+         },
+     },
  }
 </script>
 
@@ -24,6 +40,13 @@
     <div id="container">
         <div id="header">
             <a :href="url">{{ url }}</a>
+            <input id="group-selection" type="text" list="groups"
+                   :placeholder="groupStore.activeGroup"
+                   @keyup.enter="changeActiveGroup"
+            />
+            <datalist id="groups">
+                <option v-for="option in group_options">{{ option }}</option>
+            </datalist>
         </div>
 
         <div id="main">
@@ -37,6 +60,14 @@
      display: flex;
      flex-direction: column;
      height: 100vh;
+ }
+ #header {
+     display: flex;
+     flex-direction: column;
+     padding-bottom: 0.25em;
+ }
+ #group-selection {
+     font-size: 1.1em;
  }
  #main {
      overflow-y: scroll;
