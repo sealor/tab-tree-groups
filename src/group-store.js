@@ -44,7 +44,8 @@ class GroupStore {
 
   async #onActivated(activeInfo) {
     let tabGroup = await this.#resolveTabGroup(activeInfo.tabId);
-    this.activateGroup(tabGroup);
+    if (tabGroup !== this.activeGroup.value)
+      this.activateGroup(tabGroup);
   }
 
 };
