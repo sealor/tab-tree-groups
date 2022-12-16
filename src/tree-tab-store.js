@@ -25,7 +25,7 @@ class TreeTabStore {
     tab.subTabs = [];
     this.#tabById[tab.id] = tab;
 
-    if (tab.openerTabId === undefined) {
+    if (tab.openerTabId === undefined || tab.openerTabId === tab.id) {
       this.rootTabs.push(tab);
     } else {
       const parentTab = this.#tabById[tab.openerTabId];
@@ -98,7 +98,7 @@ class TreeTabStore {
 
     const tab = this.#tabById[tabId];
 
-    if (tab.openerTabId === undefined) {
+    if (tab.openerTabId === undefined || tab.openerTabId === tab.id) {
       removeTabInArray(this.rootTabs, tab);
     } else {
       const parentTab = this.#tabById[tab.openerTabId];
