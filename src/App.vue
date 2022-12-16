@@ -50,7 +50,7 @@
         </div>
 
         <div id="main">
-            <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.id"/>
+            <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.randomId"/>
         </div>
     </div>
 </template>

@@ -20,6 +20,7 @@ class TreeTabStore {
   }
 
   #addTab(tab) {
+    tab.randomId = Math.random();
     tab = reactive(tab);
     tab.subTabs = [];
     this.#tabById[tab.id] = tab;
