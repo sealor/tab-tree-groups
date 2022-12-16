@@ -11,11 +11,7 @@
   },
 
   "background": {
-    "page": "index.html"
-  },
-
-  "options_ui": {
-    "page": "index.html"
+    "page": "background.html"
   },
 
   "permissions": [

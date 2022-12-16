@@ -2,7 +2,7 @@
  import Tab from './components/Tab.vue';
  import { treeTabStore } from './tree-tab-store.js';
 
- const url = browser.extension.getBackgroundPage().location;
+ const url = document.location.href;
 
  export default {
      components: {
