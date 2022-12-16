@@ -57,7 +57,10 @@
 </script>
 
 <template>
-    <div ref="root" @click="activateTab" @click.middle="removeTab" @contextmenu="openTabContextMenu" class="tab" :class="{ active: tab.active }">
+    <div ref="root"
+         @click="activateTab" @click.middle="removeTab" @contextmenu="openTabContextMenu"
+         class="tab" :class="{ active: tab.active, discarded: tab.discarded }"
+    >
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
@@ -81,9 +84,10 @@
      margin-left: 0.8em;
  }
 
- div.tab { background-color: #ebebeb; }
+ div.tab { background-color: #ebebeb; color: #111 }
  div.tab.active { background-color: #fbfbfb; }
  div.tab:not(.active):hover { background-color: #d8d8d8; }
+ div.tab.discarded { color: #888; }
 
  div.tab img {
      height: 18px;
