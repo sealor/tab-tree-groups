@@ -1,6 +1,6 @@
 <script>
  import Tab from './components/Tab.vue';
- import { treeTabStore } from './tree-tab-store.js';
+ import { tabTreeStore } from './tab-tree-store.js';
  import { groupStore } from './group-store.js';
 
  const url = document.location.href;
@@ -12,12 +12,12 @@
      data() {
          return {
              url: url,
-             treeTabStore: treeTabStore,
+             tabTreeStore: tabTreeStore,
              groupStore: groupStore,
          }
      },
      created() {
-         treeTabStore.init();
+         tabTreeStore.init();
          groupStore.init();
      },
      methods: {
@@ -50,7 +50,7 @@
         </div>
 
         <div id="main">
-            <Tab v-for="tab in treeTabStore.rootTabs" :tab="tab" :key="tab.randomId"/>
+            <Tab v-for="tab in tabTreeStore.rootTabs" :tab="tab" :key="tab.randomId"/>
         </div>
     </div>
 </template>

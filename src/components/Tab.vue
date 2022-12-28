@@ -1,5 +1,5 @@
 <script>
- import { treeTabStore } from '../tree-tab-store.js';
+ import { tabTreeStore } from '../tab-tree-store.js';
 
  export default {
      props: ["tab"],
@@ -14,11 +14,11 @@
      },
      methods: {
          activateTab() {
-             treeTabStore.activateTab(this.tab.id);
+             tabTreeStore.activateTab(this.tab.id);
          },
          removeTab() {
-             console.log("tree", "removeTab", treeTabStore);
-             treeTabStore.removeTab(this.tab.id);
+             console.log("tree", "removeTab", tabTreeStore);
+             tabTreeStore.removeTab(this.tab.id);
          },
          openTabContextMenu(event) {
              browser.menus.overrideContext({

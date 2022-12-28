@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue';
-import { treeTabStore } from './tree-tab-store.js';
+import { tabTreeStore } from './tab-tree-store.js';
 
 let GROUP_KEY = "group";
 
@@ -26,7 +26,7 @@ class GroupStore {
     tabGroups.forEach(tabGroup => this.groups.add(tabGroup));
 
     let activeGroupTabs = tabs.filter((tab, index) => tabGroups[index] === group);
-    treeTabStore.replaceTabs(activeGroupTabs);
+    tabTreeStore.replaceTabs(activeGroupTabs);
   }
 
   async #resolveTabGroup(tabId) {

@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
 
-class TreeTabStore {
+class TabTreeStore {
   rootTabs = reactive([]);
   #tabById = {};
 
@@ -117,6 +117,6 @@ class TreeTabStore {
   }
 };
 
-const treeTabStore = new TreeTabStore();
+const tabTreeStore = new TabTreeStore();
 
-export { treeTabStore };
+export { tabTreeStore };
