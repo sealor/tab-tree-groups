@@ -27,6 +27,9 @@
          },
      },
      computed: {
+         rootTabs() {
+             return tabTreeStore.tabTree.get("root");
+         },
          group_options() {
              var options = Array.from(groupStore.groups);
              options.sort();
@@ -50,7 +53,7 @@
         </div>
 
         <div id="main">
-            <Tab v-for="tab in tabTreeStore.rootTabs" :tab="tab" :key="tab.randomId"/>
+            <Tab v-for="tab in rootTabs" :tab="tab" :key="tab.randomId"/>
         </div>
     </div>
 </template>

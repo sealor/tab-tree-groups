@@ -6,6 +6,7 @@
      data() {
          return {
              tab: this.tab,
+             tabTreeStore: tabTreeStore,
          }
      },
      mounted() {
@@ -47,6 +48,11 @@
               }
          },
      },
+     computed: {
+         subTabs() {
+             return tabTreeStore.tabTree.get(this.tab.id);
+         },
+     },
      watch: {
          "tab.active"(newValue) {
              if (newValue === true)
@@ -64,7 +70,7 @@
         <img :src="tab.favIconUrl">{{ tab.title }}
     </div>
     <div class="subTabs">
-        <Tab v-for="subTab in tab.subTabs" :tab="subTab" :key="subTab.randomId"/>
+        <Tab v-for="subTab in subTabs" :tab="subTab" :key="subTab.randomId"/>
     </div>
 </template>
 

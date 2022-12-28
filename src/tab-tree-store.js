@@ -1,8 +1,8 @@
 import { reactive } from 'vue';
 
 class TabTreeStore {
-  rootTabs = reactive([]);
-  #tabById = {};
+  tabTree = reactive(new Map([["root", []]]));
+  #tabById = new Map();
 
   init() {
     browser.tabs.onCreated.addListener((tab) => this.#onCreated(tab));
@@ -14,23 +14,28 @@ class TabTreeStore {
   }
 
   replaceTabs(tabs) {
-    this.rootTabs.splice(0, this.rootTabs.length);
-    this.#tabById = {};
+    this.tabTree.forEach((value, key, map) => { map.delete(key); });
+    this.tabTree.set("root", []);
+
+    this.#tabById = new Map();
+
     tabs.forEach(tab => this.#addTab(tab));
   }
 
   #addTab(tab) {
     tab.randomId = Math.random();
     tab = reactive(tab);
-    tab.subTabs = [];
-    this.#tabById[tab.id] = tab;
+    this.#tabById.set(tab.id, tab);
 
     if (tab.openerTabId === undefined || tab.openerTabId === tab.id) {
-      this.rootTabs.push(tab);
-    } else {
-      const parentTab = this.#tabById[tab.openerTabId];
-      parentTab.subTabs.push(tab);
+      this.tabTree.get("root").push(tab);
+      return;
     }
+
+    if (!this.tabTree.has(tab.openerTabId))
+      this.tabTree.set(tab.openerTabId, []);
+
+    this.tabTree.get(tab.openerTabId).push(tab);
   }
 
   #onCreated(tab) {
@@ -44,7 +49,7 @@ class TabTreeStore {
       tmpChangeInfo.favIconUrl = "changed";
     console.log("tree", "onUpdated", tabId, tmpChangeInfo, tab);
 
-    const originTab = this.#tabById[tabId];
+    const originTab = this.#tabById.get(tabId);
     // FIXME: remove and re-create tab if openerTabId changed
     if (originTab.openerTabId !== tab.openerTabId) {
       this.#onRemoved(originTab.id);
@@ -62,11 +67,11 @@ class TabTreeStore {
   #onActivated(activeInfo) {
     console.log("tree", "onActivated", activeInfo);
 
-    const tab = this.#tabById[activeInfo.tabId];
+    const tab = this.#tabById.get(activeInfo.tabId);
     tab.active = true;
 
     if (activeInfo.previousTabId !== undefined) {
-      const previousTab = this.#tabById[activeInfo.previousTabId];
+      const previousTab = this.#tabById.get(activeInfo.previousTabId);
       previousTab.active = false;
     }
   }
@@ -74,12 +79,12 @@ class TabTreeStore {
   removeTab(tabId) {
     let collectTabWithSubTabs = (tab) => {
       let tabs = [tab];
-      for (let subTab of tab.subTabs)
+      for (let subTab of this.tabTree.get(tab.id) ?? [])
         tabs = tabs.concat(collectTabWithSubTabs(subTab));
       return tabs;
     };
 
-    const tab = this.#tabById[tabId];
+    const tab = this.#tabById.get(tabId);
     const removeTabs = collectTabWithSubTabs(tab);
     removeTabs.reverse();
     const removeTabIds = removeTabs.map(tab => tab.id);
@@ -96,16 +101,15 @@ class TabTreeStore {
       tabs.splice(tabIndex, 1);
     };
 
-    const tab = this.#tabById[tabId];
+    const tab = this.#tabById.get(tabId);
 
     if (tab.openerTabId === undefined || tab.openerTabId === tab.id) {
-      removeTabInArray(this.rootTabs, tab);
+      removeTabInArray(this.tabTree.get("root"), tab);
     } else {
-      const parentTab = this.#tabById[tab.openerTabId];
-      removeTabInArray(parentTab.subTabs, tab);
+      removeTabInArray(this.tabTree.get(tab.openerTabId), tab);
     }
 
-    delete this.#tabById[tabId];
+    delete this.#tabById.delete(tabId);
   }
 
   #onMoved(tabId, moveInfo) {
