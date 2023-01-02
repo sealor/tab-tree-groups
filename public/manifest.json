@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Grouped Tab Trees",
+  "name": "Tab Tree Groups",
   "version": "1.0",
 
-  "description": "Grouped Tab Trees description",
+  "description": "Tab Tree Groups description",
 
   "sidebar_action": {
-    "default_title" : "Grouped Tab Trees",
+    "default_title" : "Tab Tree Groups",
     "default_panel": "index.html"
   },
 

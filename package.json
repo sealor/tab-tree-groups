@@ -1,5 +1,5 @@
 {
-  "name": "grouped-tab-trees",
+  "name": "tab-tree-groups",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
