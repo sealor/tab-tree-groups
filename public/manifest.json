@@ -10,10 +10,6 @@
     "default_panel": "index.html"
   },
 
-  "background": {
-    "page": "background.html"
-  },
-
   "permissions": [
     "tabs",
     "sessions",
