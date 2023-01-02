@@ -1,29 +1,33 @@
-# tab-tree-groups
+# Tab Tree Groups Firefox Extension
 
-This template should help get you started developing with Vue 3 in Vite.
+This Firefox Extension provides a tab view with grouped tree style structure.
 
-## Recommended IDE Setup
+There are already other extensions with similar functionalities like [Tree Style Tab](https://github.com/piroor/treestyletab) or [Sidebery](https://github.com/mbnuqw/sidebery).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+The *Tab Tree Groups Firefox Extension* focuses on the following aspects:
 
-## Customize configuration
+* fast GUI interaction
+* reliable tab tree persistence
+* minimalistic features
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Those aspects shall guarantee a small code base with low maintenance efforts.
 
-## Project Setup
 
-```sh
-npm install
-```
+## Collaboration
 
-### Compile and Hot-Reload for Development
 
-```sh
-npm run dev
-```
+### Get Involved
 
-### Compile and Minify for Production
+This Firefox Extension is still in an early stage. Nevertheless, do not hesitate to send PRs or issues.
 
-```sh
-npm run build
-```
+
+### Distribution
+
+This Firefox Extension is currently only available via GitHub at <https://github.com/sealor/tab-tree-groups>.
+
+
+### License
+
+Mozilla Public License 2.0
+
+See [LICENSE](LICENSE) for full text.
