@@ -18,7 +18,7 @@
              tabTreeStore.activateTab(this.tab.id);
          },
          removeTab() {
-             console.log("tree", "removeTab", tabTreeStore);
+             console.log("tree", "removeTab", this.tab);
              tabTreeStore.removeTab(this.tab.id);
          },
          openTabContextMenu(event) {
