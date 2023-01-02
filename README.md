@@ -16,6 +16,15 @@ Those aspects shall guarantee a small code base with low maintenance efforts.
 ## Collaboration
 
 
+## Development
+
+The following `npm` scripts are used for development:
+
+* `npm install` - installs needed dependencies
+* `npm run build` - builds the entire project and provides a `dist` folder for temporary installation
+* `npm run xpi` - builds the entire project and provides a `tab-tree-groups.xpi` file for signing and distribution
+
+
 ### Get Involved
 
 This Firefox Extension is still in an early stage. Nevertheless, do not hesitate to send PRs or issues.
