@@ -76,21 +76,21 @@ class TabTreeStore {
     }
   }
 
+  resolveTabAndSubTabIds(tabId) {
+    let tabIds = [tabId];
+    const subTabs = this.tabTree.get(tabId) ?? [];
+    subTabs.forEach(tab => {
+      tabIds = tabIds.concat(this.resolveTabAndSubTabIds(tab.id));
+    });
+    return tabIds;
+  }
+
   removeTab(tabId) {
-    let collectTabWithSubTabs = (tab) => {
-      let tabs = [tab];
-      for (let subTab of this.tabTree.get(tab.id) ?? [])
-        tabs = tabs.concat(collectTabWithSubTabs(subTab));
-      return tabs;
-    };
+    const tabIdsToBeRemoved = this.resolveTabAndSubTabIds(tabId);
+    tabIdsToBeRemoved.reverse();
+    console.log("tree", "removeTabs", tabIdsToBeRemoved);
 
-    const tab = this.#tabById.get(tabId);
-    const removeTabs = collectTabWithSubTabs(tab);
-    removeTabs.reverse();
-    const removeTabIds = removeTabs.map(tab => tab.id);
-    console.log("tree", "removeTabs", removeTabIds);
-
-    browser.tabs.remove(removeTabIds);
+    browser.tabs.remove(tabIdsToBeRemoved);
   }
 
   #onRemoved(tabId, removeInfo) {
