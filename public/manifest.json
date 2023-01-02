@@ -16,11 +16,5 @@
     "management",
     "menus",
     "menus.overrideContext"
-  ],
-
-  "browser_specific_settings": {
-    "gecko": {
-      "id": "some-name@example.org"
-    }
-  }
+  ]
 }
