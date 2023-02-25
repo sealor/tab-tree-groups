@@ -11,6 +11,7 @@ class GroupStore {
 
   async init() {
     browser.tabs.onCreated.addListener(tab => this.#onCreated(tab));
+    browser.tabs.onRemoved.addListener((tabId, removeInfo) => this.#onRemoved(tabId, removeInfo));
     browser.tabs.onActivated.addListener((activeInfo) => this.#onActivated(activeInfo));
     browser.menus.onClicked.addListener((info, tab) => this.#onClicked(info, tab));
 
@@ -42,7 +43,8 @@ class GroupStore {
   }
 
   setTabGroup(tabId, group) {
-    assert(typeof tabGroup === "string");
+    if (typeof group !== "string")
+      throw "Tab group is not a string " + group;
 
     this.#groupByTabId.set(tabId, group);
     return browser.sessions.setTabValue(tabId, GROUP_KEY, group);
@@ -54,6 +56,10 @@ class GroupStore {
 
   #onCreated(tab) {
     this.setTabGroup(tab.id, this.activeGroup.value);
+  }
+
+  #onRemoved(tabId, removeInfo) {
+    this.#groupByTabId.delete(tabId);
   }
 
   async #onActivated(activeInfo) {
@@ -89,31 +95,24 @@ class GroupStore {
     const subTreeTabIds = tabTreeStore.resolveTabAndSubTabIds(subTreeTabId);
 
     await Promise.all(subTreeTabIds.map(tabId => this.setTabGroup(tabId, group)));
-
     // Sidebery and TreeStyleTab use openerTabId === id for root tabs
     await browser.tabs.update(subTreeTabId, {openerTabId: subTreeTabId});
 
-    let lastTabIdOfGroup = await this.#resolveLastTabIdOfGroup(group) ?? browser.tabs.TAB_ID_NONE;
-    if (subTreeTabIds.includes(lastTabIdOfGroup))
-      lastTabIdOfGroup = browser.tabs.TAB_ID_NONE;
-    console.log("tree", "moveTabsToEndOfGroup", subTreeTabIds, lastTabIdOfGroup);
-    await browser.tabs.moveInSuccession(subTreeTabIds, lastTabIdOfGroup, {append: true});
+    let lastTabIndexOfGroup = await this.#resolveLastTabIndexOfGroup(group) ?? browser.tabs.TAB_ID_NONE;
+    if (subTreeTabIds.includes(lastTabIndexOfGroup))
+      lastTabIndexOfGroup = browser.tabs.TAB_ID_NONE;
+    console.log("tree", "moveTabsToEndOfGroup", subTreeTabIds, lastTabIndexOfGroup);
+    const movedTabs = await browser.tabs.move(subTreeTabIds, {index: lastTabIndexOfGroup});
+    // Quirk: moved tabs sometimes lose their openerTabId
+    await Promise.all(movedTabs.map(tab => browser.tabs.update(tab.id, {openerTabId: tab.openerTabId ?? tab.id})));
 
     this.activateGroup(this.activeGroup.value);
   }
 
-  async #resolveLastTabIdOfGroup(group, tabs) {
-    if (tabs === undefined)
-      return await this.#resolveLastTabIdOfGroup(group, tabTreeStore.tabTree.get("root"));
-
-    for (tab of tabs.splice().reverse()) {
-      const lastTabId = await this.#resolveLastTabIdOfGroup(group, tabTreeStore.tabTree.get(tab.id))
-      if (lastTabId !== undefined)
-        if (await this.getTabGroup(tab.id) === group)
-          return tab.id;
-    }
-
-    return undefined;
+  async #resolveLastTabIndexOfGroup(group) {
+    const tabs = await browser.tabs.query({currentWindow: true});
+    const tab = tabs.findLast(async tab => await this.getTabGroup(tab.id) === group);
+    return tab.index;
   }
 
 };

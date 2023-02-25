@@ -112,8 +112,9 @@ class TabTreeStore {
     delete this.#tabById.delete(tabId);
   }
 
-  #onMoved(tabId, moveInfo) {
-    console.log("tree", "onMoved", tabId, moveInfo);
+  async #onMoved(tabId, moveInfo) {
+    const tab = await browser.tabs.get(tabId);
+    console.log("tree", "onMoved", tabId, moveInfo, tab.openerTabId);
   }
 
   #onReplaced(addedTabId, removedTabId) {
